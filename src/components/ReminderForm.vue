@@ -161,27 +161,37 @@
 
         <!-- Пресеты -->
         <div>
-          <label class="block text-xs text-hint-color mb-2">Пресеты</label>
+          <div class="flex items-center justify-between mb-2">
+            <label class="block text-xs text-hint-color">Пресеты</label>
+          </div>
           <div class="flex flex-wrap gap-2">
-            <button
+            <div
               v-for="preset in allPresets"
               :key="preset.id"
-              type="button"
-              @click="applyPreset(preset)"
-              class="relative px-3 py-1.5 rounded-lg text-sm transition-all"
-              :class="isPresetActive(preset) 
-                ? 'bg-primary text-primary-text' 
-                : 'bg-secondary-bg hover:bg-secondary-bg/80'"
+              class="relative group"
             >
-              {{ preset.label }}
-              <span
-                v-if="!preset.isDefault"
-                @click.stop="presetToDelete = preset"
-                class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
+              <button
+                type="button"
+                @click="applyPreset(preset)"
+                class="px-3 py-1.5 rounded-lg text-sm transition-all pr-8"
+                :class="isPresetActive(preset) 
+                  ? 'bg-primary text-primary-text' 
+                  : 'bg-secondary-bg hover:bg-secondary-bg/80'"
               >
-                ×
-              </span>
-            </button>
+                {{ preset.label }}
+              </button>
+              <button
+                v-if="!preset.isDefault"
+                type="button"
+                @click.stop="presetToDelete = preset"
+                class="absolute right-1 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-red-500/80 hover:bg-red-500 text-white text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                title="Удалить пресет"
+              >
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 

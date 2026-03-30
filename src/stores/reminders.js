@@ -23,15 +23,15 @@ export const RELATIVE_INTERVALS = [
   { value: 168, unit: 'часов', key: 'hours' } // неделя
 ]
 
-// Дни недели
+// Дни недели (начиная с понедельника)
 export const WEEKDAYS = [
-  { value: 0, label: 'Воскресенье', short: 'Вс' },
   { value: 1, label: 'Понедельник', short: 'Пн' },
   { value: 2, label: 'Вторник', short: 'Вт' },
   { value: 3, label: 'Среда', short: 'Ср' },
   { value: 4, label: 'Четверг', short: 'Чт' },
   { value: 5, label: 'Пятница', short: 'Пт' },
-  { value: 6, label: 'Суббота', short: 'Сб' }
+  { value: 6, label: 'Суббота', short: 'Сб' },
+  { value: 0, label: 'Воскресенье', short: 'Вс' }
 ]
 
 // Встроенные пресеты
