@@ -1,19 +1,25 @@
 <template>
   <div class="flex flex-col h-full">
-    <!-- Статистика -->
-    <div v-if="reminders.length > 0" class="flex gap-2 mb-4 overflow-x-auto pb-2">
-      <div class="bg-secondary-bg rounded-lg px-4 py-2 flex-shrink-0">
-        <span class="text-sm text-hint-color">Всего:</span>
-        <span class="font-semibold ml-1">{{ reminders.length }}</span>
-      </div>
-      <div class="bg-green-100 rounded-lg px-4 py-2 flex-shrink-0">
-        <span class="text-sm text-green-700">Предстоящих:</span>
-        <span class="font-semibold ml-1 text-green-700">{{ upcomingCount }}</span>
-      </div>
-      <div v-if="overdueCount > 0" class="bg-red-100 rounded-lg px-4 py-2 flex-shrink-0">
-        <span class="text-sm text-red-700">Просроченных:</span>
-        <span class="font-semibold ml-1 text-red-700">{{ overdueCount }}</span>
-      </div>
+    <!-- Фильтрация -->
+    <div class="flex gap-2 mb-4 overflow-x-auto pb-2">
+      <button
+        @click="filter = 'all'"
+        :class="['px-4 py-2 rounded-lg text-sm font-medium flex-shrink-0', filter === 'all' ? 'bg-blue-500 text-white' : 'bg-secondary-bg text-hint-color']"
+      >
+        Всего ({{ reminders.length }})
+      </button>
+      <button
+        @click="filter = 'upcoming'"
+        :class="['px-4 py-2 rounded-lg text-sm font-medium flex-shrink-0', filter === 'upcoming' ? 'bg-blue-500 text-white' : 'bg-secondary-bg text-hint-color']"
+      >
+        Активные ({{ upcomingCount }})
+      </button>
+      <button
+        @click="filter = 'completed'"
+        :class="['px-4 py-2 rounded-lg text-sm font-medium flex-shrink-0', filter === 'completed' ? 'bg-blue-500 text-white' : 'bg-secondary-bg text-hint-color']"
+      >
+        Выполненные ({{ completedCount }})
+      </button>
     </div>
 
     <!-- Пустое состояние -->
@@ -32,30 +38,51 @@
 
     <!-- Список напоминаний -->
     <div v-else class="flex-1 overflow-y-auto -mx-4 px-4">
-      <!-- Просроченные -->
-      <div v-if="overdueReminders.length > 0" class="mb-6">
-        <h3 class="text-sm font-medium text-red-500 mb-3 flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          Просроченные
-        </h3>
+      <!-- Все напоминания -->
+      <div v-if="filter === 'all'">
+        <div v-if="upcomingReminders.length > 0" class="mb-6">
+          <h3 class="text-sm font-medium text-hint-color mb-3">Предстоящие</h3>
+          <ReminderItem
+            v-for="reminder in upcomingReminders"
+            :key="reminder.id"
+            :reminder="reminder"
+            @edit="$emit('edit', reminder)"
+            @delete="$emit('delete', reminder.id)"
+          />
+        </div>
+        
+        <div v-if="completedReminders.length > 0">
+          <h3 class="text-sm font-medium text-green-500 mb-3 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Выполненные
+          </h3>
+          <ReminderItem
+            v-for="reminder in completedReminders"
+            :key="reminder.id"
+            :reminder="reminder"
+            @edit="$emit('edit', reminder)"
+            @delete="$emit('delete', reminder.id)"
+          />
+        </div>
+      </div>
+      
+      <!-- Только предстоящие -->
+      <div v-else-if="filter === 'upcoming'">
         <ReminderItem
-          v-for="reminder in overdueReminders"
+          v-for="reminder in upcomingReminders"
           :key="reminder.id"
           :reminder="reminder"
           @edit="$emit('edit', reminder)"
           @delete="$emit('delete', reminder.id)"
         />
       </div>
-
-      <!-- Предстоящие -->
-      <div v-if="upcomingReminders.length > 0">
-        <h3 v-if="overdueReminders.length > 0" class="text-sm font-medium text-hint-color mb-3">
-          Предстоящие
-        </h3>
+      
+      <!-- Только выполненные -->
+      <div v-else-if="filter === 'completed'">
         <ReminderItem
-          v-for="reminder in upcomingReminders"
+          v-for="reminder in completedReminders"
           :key="reminder.id"
           :reminder="reminder"
           @edit="$emit('edit', reminder)"
@@ -67,7 +94,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import ReminderItem from './ReminderItem.vue'
 
 const props = defineProps({
@@ -79,16 +106,17 @@ const props = defineProps({
 
 defineEmits(['edit', 'delete'])
 
-const overdueReminders = computed(() => {
-  const now = new Date()
-  return props.reminders.filter(r => new Date(r.datetime) < now)
+const filter = ref('all')
+
+const completedReminders = computed(() => {
+  return props.reminders.filter(r => r.completed)
 })
 
 const upcomingReminders = computed(() => {
   const now = new Date()
-  return props.reminders.filter(r => new Date(r.datetime) >= now)
+  return props.reminders.filter(r => !r.completed)
 })
 
-const overdueCount = computed(() => overdueReminders.value.length)
+const completedCount = computed(() => completedReminders.value.length)
 const upcomingCount = computed(() => upcomingReminders.value.length)
 </script>

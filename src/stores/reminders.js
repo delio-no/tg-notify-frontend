@@ -250,6 +250,17 @@ export const useRemindersStore = defineStore('reminders', () => {
     return false
   }
 
+  // Отметка напоминания как выполненного
+  const toggleReminderCompleted = (id) => {
+    const index = reminders.value.findIndex(r => r.id === id)
+    if (index !== -1) {
+      reminders.value[index].completed = !reminders.value[index].completed
+      saveReminders()
+      return reminders.value[index]
+    }
+    return null
+  }
+
   // Получение напоминания по ID
   const getReminderById = (id) => {
     return reminders.value.find(r => r.id === id)
@@ -268,10 +279,9 @@ export const useRemindersStore = defineStore('reminders', () => {
     return sortedReminders.value.filter(r => getNextTriggerTime(r) >= now)
   })
 
-  // Просроченные напоминания
-  const overdueReminders = computed(() => {
-    const now = new Date()
-    return sortedReminders.value.filter(r => getNextTriggerTime(r) < now)
+  // Выполненные напоминания
+  const completedReminders = computed(() => {
+    return sortedReminders.value.filter(r => r.completed)
   })
 
   // Инициализация
@@ -286,7 +296,7 @@ export const useRemindersStore = defineStore('reminders', () => {
     // Computed
     sortedReminders,
     upcomingReminders,
-    overdueReminders,
+    completedReminders,
     allPresets,
     // Константы
     REMINDER_TYPES,
@@ -298,6 +308,7 @@ export const useRemindersStore = defineStore('reminders', () => {
     addReminder,
     updateReminder,
     deleteReminder,
+    toggleReminderCompleted,
     getReminderById,
     getNextTriggerTime,
     getPresetDatetime,

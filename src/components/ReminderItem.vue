@@ -1,7 +1,7 @@
 <template>
   <div 
     class="bg-secondary-bg rounded-xl p-4 mb-3 fade-in transition-all duration-200 hover:shadow-md"
-    :class="{ 'opacity-60': isOverdue && !reminder.completed }"
+    :class="{ 'opacity-60': reminder.completed }"
   >
     <div class="flex items-start justify-between">
       <div class="flex-1 min-w-0">
@@ -29,16 +29,22 @@
               d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <span 
-            class="text-sm"
-            :class="isOverdue && !reminder.completed ? 'text-red-500 font-medium' : 'text-hint-color'"
-          >
+          <span class="text-sm text-hint-color">
             {{ formattedDate }}
           </span>
         </div>
       </div>
       
       <div class="flex items-center gap-2 flex-shrink-0">
+        <button 
+          @click="toggleCompleted"
+          class="p-2 rounded-lg hover:bg-background transition-colors"
+          aria-label="Отметить как выполненное"
+        >
+          <svg class="w-5 h-5" :class="reminder.completed ? 'text-green-500' : 'text-hint-color'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </button>
         <button 
           @click="$emit('edit', reminder)"
           class="p-2 rounded-lg hover:bg-background transition-colors"
