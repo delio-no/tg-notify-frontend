@@ -1,0 +1,99 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependency directories
+node_modules/
+.jhipster/
+
+# Build outputs
+dist/
+dist-ssr/
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+.env*.local
+
+# Cache directories
+.cache
+.parcel-cache
+.temp
+.nuxt
+.output
+
+# Testing
+coverage
+.nyc_output
+.vitest
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# TypeScript
+*.tsbuildinfo
+
+# Optional: if you're using ESLint/Prettier
+.eslintcache
+.prettiercache
+
+# Optional: if you're using Vue-specific
+.vetur
+.vite
+
+# Optional: if you're using Pinia stores with persistence
+pinia-persistedstate.json
+
+# Optional: Tailwind specific (if you have custom configs)
+tailwind.config.js.backup
+
+# Optional: if you're using Docker
+docker-compose.override.yml
+
+# Optional: if you're using Firebase
+.firebase
+
+# Optional: if you're using Netlify
+.netlify
+
+# Optional: if you're using Vercel
+.vercel
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+.directory
+.directory-*
+
+# Optional: if you're using PWA workbox
+workbox-config.js
+sw.js
